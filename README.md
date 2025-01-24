@@ -94,42 +94,55 @@ This project implements a text-to-speech reader using a Raspberry Pi, camera mod
 
 **Assistive Tool for Visually Impaired**:
   Helps visually impaired individuals by reading out text from documents or signs.
+  
 **Educational Purposes**:
   Demonstrates how OCR and text-to-speech can be integrated into real-world projects.
+  
 **Portable Text Reader**:
   Can be used to build a portable OCR-based text reader for various environments.
 
 ## Key Functions
 
   texttospeech()
+  
     1. Captures a frame using the Raspberry Pi's camera.
+    
     2. Uses Tesseract OCR to extract text from the frame.
+    
     3. Saves the text into String.txt.
+    
     4. Converts the text to speech using gTTS.
+    
     5. Plays the generated audio using VLC media player.
 
 ## GPIO Setup
 
   **Button Pin**: GPIO 16
+  
   **Mode**: Internal pull-up resistor is used to ensure the pin defaults to HIGH (not pressed).
             When the button is pressed, the pin goes LOW, triggering the texttospeech() function.
 
 ## Handling Interruptions
 
   The program uses a try-except block:
+  
   **Main loop**: Continuously monitors for button presses.
+  
   **Keyboard Interrupt (Ctrl+C)**: Ensures GPIO pins are cleaned up properly using:
     GPIO.cleanup()
 
 ## Limitations
 
   - Requires good lighting for accurate text recognition.
+    
   - May not work well with heavily styled or handwritten fonts.
 
 ## Future Enhancements
 
   - Add support for multiple languages in OCR and speech.
+    
   - Implement real-time video stream OCR.
+    
   - Improve text extraction accuracy with advanced preprocessing techniques.
 
 
