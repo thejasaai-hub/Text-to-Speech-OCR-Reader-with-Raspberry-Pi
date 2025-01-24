@@ -71,16 +71,18 @@ This project implements a text-to-speech reader using a Raspberry Pi, camera mod
 
 1. **Install Required Libraries**:
 
-  sudo apt-get update
-  sudo apt-get install tesseract-ocr vlc python3-opencv
-  pip3 install gTTS python-vlc
+     sudo apt-get update
+   
+     sudo apt-get install tesseract-ocr vlc python3-opencv
+   
+     pip3 install gTTS python-vlc
 
-2. **Connect the Hardware:**
+3. **Connect the Hardware:**
 
    - Attach the camera module to the Raspberry Pi.
    - Connect the button to GPIO 16 and GND (use a pull-up resistor if needed).
 
-3. **Run the Program**:
+4. **Run the Program**:
 
   - Save the script as text_to_speech_ocr.py.
   - Run the script:
