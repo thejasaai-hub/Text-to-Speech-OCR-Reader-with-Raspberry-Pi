@@ -1,0 +1,80 @@
+#!/home/pi/.local/bin/python3
+import RPi.GPIO as GPIO
+import time
+import cv2
+import pytesseract
+import os
+from gtts import gTTS
+import vlc
+
+# Connects pytesseract(wrapper) to the trained tesseract module
+pytesseract.pytesseract.tesseract_cmd = '/usr/bin/tesseract'
+
+# Function to convert text to speech
+def texttospeech():
+    # Open the file with write permission
+    filewrite = open("String.txt", "w")
+
+    # Video feed
+    video = cv2.VideoCapture(0)
+
+    # Capture one frame from the video feed
+    extra, frames = video.read()
+    data4 = pytesseract.image_to_data(frames)
+
+    for z, a in enumerate(data4.splitlines()):
+        # Counter
+        if z != 0:
+            # Converts 'data1' string into a list stored in 'a'
+            a = a.split()
+            # Checking if array contains a word
+            if len(a) == 12:
+                # Storing values in the right variables
+                x, y = int(a[6]), int(a[7])
+                w, h = int(a[8]), int(a[9])
+                # Display bounding box of each word
+                cv2.rectangle(frames, (x, y), (x + w, y + h), (0, 0, 255), 1)
+                # Display detected word under each bounding box
+                cv2.putText(frames, a[11], (x - 15, y), cv2.FONT_HERSHEY_PLAIN, 2, (0, 0, 255), 1)
+                # Writing to the file
+                filewrite.write(a[11] + " ")
+    filewrite.close()
+
+    # Open the file with read permission
+    fileread = open("String.txt", "r")
+    line = fileread.read().strip()  # Remove leading/trailing whitespace
+    fileread.close()
+
+    if line:
+        # Generate speech and save to file
+        language = 'en'
+        speech = gTTS(text=line, lang=language, slow=False)
+        speech.save("test.mp3")
+
+        # Use VLC to play the audio file
+        instance = vlc.Instance()
+        player = instance.media_player_new()
+        media = instance.media_new("test.mp3")
+        media.get_mrl()
+        player.set_media(media)
+        player.play()
+        # Wait until playback finishes
+        while player.is_playing():
+            pass
+
+# Button pi
+BUTTON_PIN = 16
+
+# Setup GPIO
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+try:
+    while True:
+        # Check button press
+        if GPIO.input(BUTTON_PIN) == GPIO.LOW:
+            print("Button is pressed")
+            texttospeech()  # Call texttospeech function when button is pressed
+            time.sleep(0.2)  # Add a small delay to avoid multiple detections
+except KeyboardInterrupt:
+    GPIO.cleanup()
