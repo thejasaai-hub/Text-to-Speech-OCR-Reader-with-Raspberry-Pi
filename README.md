@@ -20,21 +20,29 @@ This project implements a text-to-speech reader using a Raspberry Pi, camera mod
 
    **Video Frame Capture**:
     - Captures a frame from the Raspberry Pi's camera using OpenCV.
+      
     **OCR Processing**:
     - Tesseract processes the frame to identify words. Bounding boxes and labels are drawn around detected text in the image.
+      
     **Text Storage**:
     - The extracted text is saved in a file named String.txt.
+      
     **Speech Generation**:
     - If the file contains text, it is converted to speech using the gTTS library and saved as an audio file (test.mp3).
+      
     **Audio Playback**:
     - The speech file is played using VLC media player, and the program waits for the playback to complete.
 
 3. **Button Control**:
+   
    - A physical button connected to GPIO 16 (BUTTON_PIN) is used to trigger the text-to-speech function. The pin is set up with an internal pull-up resistor to default to a HIGH state.
+     
    - When the button is pressed (LOW state), the program calls the texttospeech function.
 
-4. **Main Loop**:
+5. **Main Loop**:
+   
     The program continuously monitors the button press. On pressing the button:
+   
     - Captures an image.
     - Extracts text from the image.
     - Converts the text to speech and plays the audio.
